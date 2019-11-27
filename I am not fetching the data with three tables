@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="English">
+<title>{{$categoryName}} in Delhi - Online Publicity</title>
+<meta charset="utf-8" name="keywords" content="{{$categoryKeywords}}">
+<meta charset="utf-8" name="description" content="{{$categoryDescription}}">
+@include('home.partials.header')
+<body>
+	<div class="container">
+		<div class="row" style="background: #efefefef">
+			@include('home.partials.catnav')
+			<div class="col-lg-9">				
+				<!-- Start Search bar in this area -->
+				<div class="row">
+					<img src="{{asset('public/category/'.$categoryImage)}}" width="100%" height="	180px;">
+				    <div class="col-lg-12 bg-light" style="margin-bottom: 10px;">
+				    	<h2 class="links"><a href="{{route('app')}}" class="text-decoration-none">Home</a>  <img src="{{asset('public/images/right.png')}}" width="12" alt="arrow">  {{$categoryName}}</h2>
+				    </div>
+				    @if($products->count() > 0)
+				    @foreach($products as $product)
+				    <div class="col-lg-4" style="padding: 0px;">
+				    	<div class="bg-white p_image">
+				    		<a href="{{route('home.single', $product)}}">
+				    			<img src="{{asset('public/productImages/'.$product->thumbnail)}}" class="img-fluid" title="{{$product->title}}" alt="{{$product->title}} in Delhi">
+				    		</a>
+				    	</div>
+				    </div>
+				    <div class="col-lg-8" style="padding: 0px;">
+				    	<div class="bg-white product_content">
+				    		<a href="{{route('home.single', $product)}}" class="text-decoration-none text-muted">
+				    		<h4 class="text-dark" title="{{$product->title}}">{{$product->title}}</h4>
+				    		<h5 class="text-muted">(+91) {{$product->phone1}}</h5>
+				    		<h5 class="text-muted">{{$product->email}}</h5>
+				    		<h5 class="text-muted">{{substr($product->address1, 0, 60)}}...
+				    			<a href="{{route('home.single', $product)}}" class="text-decoration-none"  title="{{$product->address1}}">more</a>
+				    		</h5>
+				    		<h5 class="text-muted" style="margin-bottom: 0px;">
+				    			@foreach($product->categories as $category)
+				    			<a href="{{route('home.category', ['category' => $category->slug])}}" class="text-muted text-decoration-none" title="{{$category->title}}">
+				    				{{$category->title}} |
+				    			</a>
+				    			@endforeach
+				    		</h5>
+				    		</a>
+				    	</div>
+				    </div>
+				    <div class="col-lg-12" style="padding: 0px;">
+				    	<div class="bg-white p_services">
+				    		<h5 class="text-dark">
+				    			@foreach($product['services']->take(4) as $service)
+				    			{{$service->title}} ,
+				    			@endforeach
+				    		</h5>
+				    	</div>
+				    </div>
+				    @endforeach
+				    @else
+				    <div class="col-lg-12">
+				    	<div>
+				    		<h5 class="text-warning">Opps!!......No Listing this Category</h5>
+				    	</div>
+				    </div>
+				    @endif
+				    <div class="col-lg-12 row">
+				    	{{$products->links()}}
+				    </div>
+				</div>
+			</div>
+			<div class="col-lg-3 popular-categories">
+			
+				<div class="bg-white col-lg-12 py-2 ct_links border">
+				<h6 class="text-dark"><strong>{{$categoryName}} </strong></h6>
+					<div class="bg-white col-lg-12 py-2 ct_links border card-title">
+						@foreach($areas as $area)
+						<a href="{{route('home.area', $area->slug)}}" class="text-decoration-none" title="{{$area->title}}">
+							<h6 class="text-muted">{{$area->title}}</h6>
+						</a>
+						@endforeach
+					</div>
+				</div>		
+				<style type="text/css">
+					.ct_links a h6{font-size: 12px;padding-top: 10px;}
+				</style>
+			</div>
+		</div>
+		<div class="row" style="background: lightgrey">
+			@include('home.partials.footerLinks')
+		<div class="col-lg-12 content">
+			<a class="text-muted">{!!$categoryContent!!}</a>
+		</div>
+			@include('home.partials.footer')
+	</div>
+</body>
+</html>
+
+<script type="text/javascript" src="{{asset('public/js/app.js')}}"></script>
+
+
+Route...............
+
+	Route::get('category/{category}', 'ViewController@categorylisting')->name('category');
+  
+  Controller ................
+  
+  public function categorylisting()
+    {
+        if(request()->category){
+            $products = Product::with('categories')->whereHas('categories', function($query){
+                $query->where('slug', request()->category);
+            })->paginate(25);
+            $categories = Category::all();
+            $advertises = Advertise::paginate(9);
+            $categoryName = $categories->where('slug', request()->category)->first()->title;
+            $categoryImage = $categories->where('slug', request()->category)->first()->thumbnail;
+            $categoryContent = $categories->where('slug', request()->category)->first()->description;
+            $categoryKeywords = $categories->where('slug', request()->category)->first()->keywords;
+            $categoryDescription = $categories->where('slug', request()->category)->first()->sDescription;
+        $advertises = Advertise::paginate(9);
+        $airticket = Category::find(1);
+        $architect = Category::find(2);
+        $bookpub = Category::find(3);
+        $bangles = Category::find(16);
+        $buseson = Category::find(17);
+        $catreer = Category::find(5);
+        $accountant = Category::find(4);
+        $computerassi = Category::find(18);
+        $corporate = Category::find(25);
+        $dentistdoc = Category::find(6);
+        $electronic = Category::find(23);
+        $finance = Category::find(22);
+        $foriegn = Category::find(13);
+        $florist = Category::find(21);
+        $gases = Category::find(15);
+        $guesthouse = Category::find(20);
+        $homenf = Category::find(8);
+        $hotel = Category::find(7);
+        $hospital = Category::find(19);
+        $jewellery = Category::find(24);
+        $musical = Category::find(28);
+        $optical = Category::find(26);
+        $propertydealers = Category::find(9);
+        $tents = Category::find(10);
+        $travel = Category::find(11);
+        $rolling = Category::find(27);
+        $advertises = Advertise::paginate(9);
+        $areas = Area::take(130)->get();
+        }else{
+            $products   = Product::inRandomOrder()->take(1)->get();
+            $categories = Category::all();
+            $advertises = Advertise::paginate(9);
+            $areas = Area::all();
+            $categoryName = 'title';
+            $categoryImage = 'thumbnail';
+            $categoryContent = 'description';
+            $categoryKeywords = 'keywords';
+            $categoryDescription = 'sDescription';  
+            $suggest             = 'suggest'; 
+        }
+        return view('home.categorylisting')->with([
+
+            'categoryName'         => $categoryName,
+            'categoryImage'        => $categoryImage,
+            'categoryContent'      => $categoryContent,
+            'categoryKeywords'     => $categoryKeywords,
+            'categoryDescription'  => $categoryDescription,
+            'products'             => $products,
+
+            'advertises'           => $advertises,
+            'airticket'            => $airticket,
+            'architect'            => $architect,
+            'bookpub'              => $bookpub,
+            'bangles'              => $bangles,
+            'buseson'              => $buseson,
+            'catreer'              => $catreer,
+            'computerassi'         => $computerassi,
+            'dentistdoc'           => $dentistdoc,
+            'finance'              => $finance,
+            'foriegn'              => $foriegn,
+            'florist'              => $florist,
+            'guesthouse'           => $guesthouse,
+            'homenf'               => $homenf, 
+            'hotel'                => $hotel,
+            'hospital'             => $hospital,
+            'propertydealers'      => $propertydealers,
+            'tents'                => $tents,
+            'travel'               => $travel,
+            'electronic'           => $electronic,
+            'gases'                => $gases,
+            'jewellery'            => $jewellery,
+            'accountant'           => $accountant,
+            'corporate'            => $corporate,
+            'musical'              => $musical,
+            'optical'              => $optical,
+            'rolling'              => $rolling,
+            'categories'           => $categories,
+            'areas'                => $areas,
+        ]);
+    }
